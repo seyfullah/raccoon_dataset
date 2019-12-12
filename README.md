@@ -1,6 +1,6 @@
-# Raccoon Detector Dataset
+# Airplane Detector Dataset
 
-This is a dataset that I collected to train my own Raccoon detector with [TensorFlow's Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection). Images are from Google and Pixabay. In total, there are 200 images (160 are used for training and 40 for validation).
+This is a dataset that I collected to train my own Airplane detector with [TensorFlow's Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection). Images are from Google and Pixabay. In total, there are 200 images (160 are used for training and 40 for validation).
 
 ## Getting Started
 

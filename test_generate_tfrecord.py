@@ -11,19 +11,19 @@ class CSVToTFExampleTest(tf.test.TestCase):
         proto_list = [p for p in proto_field]
         self.assertListEqual(proto_list, expectation)
 
-    def test_csv_to_tf_example_one_raccoon_per_file(self):
-        """Generate tf records for one raccoon from one file."""
-        image_file_name = 'tmp_raccoon_image.jpg'
+    def test_csv_to_tf_example_one_airplane_per_file(self):
+        """Generate tf records for one airplane from one file."""
+        image_file_name = 'tmp_airplane_image.jpg'
         image_data = np.random.rand(256, 256, 3)
         save_path = os.path.join(self.get_temp_dir(), image_file_name)
         image = PIL.Image.fromarray(image_data, 'RGB')
         image.save(save_path)
 
         column_names = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
-        raccoon_data = [('tmp_raccoon_image.jpg', 256, 256, 'raccoon', 64, 64, 192, 192)]
-        raccoon_df = pd.DataFrame(raccoon_data, columns=column_names)
+        airplane_data = [('tmp_airplane_image.jpg', 256, 256, 'airplane', 64, 64, 192, 192)]
+        airplane_df = pd.DataFrame(airplane_data, columns=column_names)
 
-        grouped = generate_tfrecord.split(raccoon_df, 'filename')
+        grouped = generate_tfrecord.split(airplane_df, 'filename')
         for group in grouped:
             example = generate_tfrecord.create_tf_example(group, self.get_temp_dir())
         self._assertProtoEqual(
@@ -52,25 +52,25 @@ class CSVToTFExampleTest(tf.test.TestCase):
             [0.75])
         self._assertProtoEqual(
             example.features.feature['image/object/class/text'].bytes_list.value,
-            [b'raccoon'])
+            [b'airplane'])
         self._assertProtoEqual(
             example.features.feature['image/object/class/label'].int64_list.value,
             [1])
 
-    def test_csv_to_tf_example_multiple_raccoons_per_file(self):
-        """Generate tf records for multiple raccoons from one file."""
-        image_file_name = 'tmp_raccoon_image.jpg'
+    def test_csv_to_tf_example_multiple_airplanes_per_file(self):
+        """Generate tf records for multiple airplanes from one file."""
+        image_file_name = 'tmp_airplane_image.jpg'
         image_data = np.random.rand(256, 256, 3)
         save_path = os.path.join(self.get_temp_dir(), image_file_name)
         image = PIL.Image.fromarray(image_data, 'RGB')
         image.save(save_path)
 
         column_names = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
-        raccoon_data = [('tmp_raccoon_image.jpg', 256, 256, 'raccoon', 64, 64, 192, 192),
-                        ('tmp_raccoon_image.jpg', 256, 256, 'raccoon', 96, 96, 128, 128)]
-        raccoon_df = pd.DataFrame(raccoon_data, columns=column_names)
+        airplane_data = [('tmp_airplane_image.jpg', 256, 256, 'airplane', 64, 64, 192, 192),
+                        ('tmp_airplane_image.jpg', 256, 256, 'airplane', 96, 96, 128, 128)]
+        airplane_df = pd.DataFrame(airplane_data, columns=column_names)
 
-        grouped = generate_tfrecord.split(raccoon_df, 'filename')
+        grouped = generate_tfrecord.split(airplane_df, 'filename')
         for group in grouped:
             example = generate_tfrecord.create_tf_example(group, self.get_temp_dir())
         self._assertProtoEqual(
@@ -99,15 +99,15 @@ class CSVToTFExampleTest(tf.test.TestCase):
             [0.75, 0.5])
         self._assertProtoEqual(
             example.features.feature['image/object/class/text'].bytes_list.value,
-            [b'raccoon', b'raccoon'])
+            [b'airplane', b'airplane'])
         self._assertProtoEqual(
             example.features.feature['image/object/class/label'].int64_list.value,
             [1, 1])
 
-    def test_csv_to_tf_example_one_raccoons_multiple_files(self):
-        """Generate tf records for one raccoon for multiple files."""
-        image_file_one = 'tmp_raccoon_image_1.jpg'
-        image_file_two = 'tmp_raccoon_image_2.jpg'
+    def test_csv_to_tf_example_one_airplanes_multiple_files(self):
+        """Generate tf records for one airplane for multiple files."""
+        image_file_one = 'tmp_airplane_image_1.jpg'
+        image_file_two = 'tmp_airplane_image_2.jpg'
         image_data = np.random.rand(256, 256, 3)
         save_path_one = os.path.join(self.get_temp_dir(), image_file_one)
         save_path_two = os.path.join(self.get_temp_dir(), image_file_two)
@@ -116,11 +116,11 @@ class CSVToTFExampleTest(tf.test.TestCase):
         image.save(save_path_two)
 
         column_names = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
-        raccoon_data = [('tmp_raccoon_image_1.jpg', 256, 256, 'raccoon', 64, 64, 192, 192),
-                        ('tmp_raccoon_image_2.jpg', 256, 256, 'raccoon', 96, 96, 128, 128)]
-        raccoon_df = pd.DataFrame(raccoon_data, columns=column_names)
+        airplane_data = [('tmp_airplane_image_1.jpg', 256, 256, 'airplane', 64, 64, 192, 192),
+                        ('tmp_airplane_image_2.jpg', 256, 256, 'airplane', 96, 96, 128, 128)]
+        airplane_df = pd.DataFrame(airplane_data, columns=column_names)
 
-        grouped = generate_tfrecord.split(raccoon_df, 'filename')
+        grouped = generate_tfrecord.split(airplane_df, 'filename')
         for group in grouped:
             if group.filename == image_file_one:
                 example = generate_tfrecord.create_tf_example(group, self.get_temp_dir())
@@ -150,7 +150,7 @@ class CSVToTFExampleTest(tf.test.TestCase):
                     [0.75])
                 self._assertProtoEqual(
                     example.features.feature['image/object/class/text'].bytes_list.value,
-                    [b'raccoon'])
+                    [b'airplane'])
                 self._assertProtoEqual(
                     example.features.feature['image/object/class/label'].int64_list.value,
                     [1])
@@ -182,15 +182,15 @@ class CSVToTFExampleTest(tf.test.TestCase):
                     [0.5])
                 self._assertProtoEqual(
                     example.features.feature['image/object/class/text'].bytes_list.value,
-                    [b'raccoon'])
+                    [b'airplane'])
                 self._assertProtoEqual(
                     example.features.feature['image/object/class/label'].int64_list.value,
                     [1])
 
-    def test_csv_to_tf_example_multiple_raccoons_multiple_files(self):
-        """Generate tf records for multiple raccoons for multiple files."""
-        image_file_one = 'tmp_raccoon_image_1.jpg'
-        image_file_two = 'tmp_raccoon_image_2.jpg'
+    def test_csv_to_tf_example_multiple_airplanes_multiple_files(self):
+        """Generate tf records for multiple airplanes for multiple files."""
+        image_file_one = 'tmp_airplane_image_1.jpg'
+        image_file_two = 'tmp_airplane_image_2.jpg'
         image_data = np.random.rand(256, 256, 3)
         save_path_one = os.path.join(self.get_temp_dir(), image_file_one)
         save_path_two = os.path.join(self.get_temp_dir(), image_file_two)
@@ -199,12 +199,12 @@ class CSVToTFExampleTest(tf.test.TestCase):
         image.save(save_path_two)
 
         column_names = ['filename', 'width', 'height', 'class', 'xmin', 'ymin', 'xmax', 'ymax']
-        raccoon_data = [('tmp_raccoon_image_1.jpg', 256, 256, 'raccoon', 64, 64, 192, 192),
-                        ('tmp_raccoon_image_1.jpg', 256, 256, 'raccoon', 32, 32, 96, 96),
-                        ('tmp_raccoon_image_2.jpg', 256, 256, 'raccoon', 96, 96, 128, 128)]
-        raccoon_df = pd.DataFrame(raccoon_data, columns=column_names)
+        airplane_data = [('tmp_airplane_image_1.jpg', 256, 256, 'airplane', 64, 64, 192, 192),
+                        ('tmp_airplane_image_1.jpg', 256, 256, 'airplane', 32, 32, 96, 96),
+                        ('tmp_airplane_image_2.jpg', 256, 256, 'airplane', 96, 96, 128, 128)]
+        airplane_df = pd.DataFrame(airplane_data, columns=column_names)
 
-        grouped = generate_tfrecord.split(raccoon_df, 'filename')
+        grouped = generate_tfrecord.split(airplane_df, 'filename')
         for group in grouped:
             if group.filename == image_file_one:
                 example = generate_tfrecord.create_tf_example(group, self.get_temp_dir())
@@ -234,7 +234,7 @@ class CSVToTFExampleTest(tf.test.TestCase):
                     [0.75, 0.375])
                 self._assertProtoEqual(
                     example.features.feature['image/object/class/text'].bytes_list.value,
-                    [b'raccoon', b'raccoon'])
+                    [b'airplane', b'airplane'])
                 self._assertProtoEqual(
                     example.features.feature['image/object/class/label'].int64_list.value,
                     [1, 1])
@@ -266,7 +266,7 @@ class CSVToTFExampleTest(tf.test.TestCase):
                     [0.5])
                 self._assertProtoEqual(
                     example.features.feature['image/object/class/text'].bytes_list.value,
-                    [b'raccoon'])
+                    [b'airplane'])
                 self._assertProtoEqual(
                     example.features.feature['image/object/class/label'].int64_list.value,
                     [1])
