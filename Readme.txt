@@ -7,7 +7,7 @@ pip install numpy==1.14.5
 
 python generate_tfrecord.py csv_input=data/airplane_labels.csv output_path=data/out.record image_dir=images
 # Create train data:
-python generate_tfrecord.py --csv_input=data/train_labels.csv  --output_path=train.record
+python generate_tfrecord.py --csv_input=data/train_labels.csv --output_path=train.record --image_dir=images
 
 # Create test data:
-python generate_tfrecord.py --csv_input=data/test_labels.csv  --output_path=test.record
+python generate_tfrecord.py --csv_input=data/test_labels.csv --output_path=test.record --image_dir=images
